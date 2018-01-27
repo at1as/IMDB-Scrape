@@ -3,7 +3,7 @@
 
 from __future__ import unicode_literals
 from ..helpers import get_config_file, HEADERS
-from base_scraper import BaseScraper
+from .base_scraper import BaseScraper
 import lxml.html
 import requests
 import time

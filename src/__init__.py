@@ -1,4 +1,4 @@
-import helpers
-import retriever
-import scraper
-import message
+import src.helpers
+import src.retriever
+import src.scraper
+import src.message

@@ -1,5 +1,5 @@
 import json
-from message import Message
+from src.message import Message
 import os
 from pymediainfo import MediaInfo
 import pdb
@@ -65,7 +65,7 @@ def get_config_file():
 def get_filepath_from_dir(filepath):
   # Given the path to a directory, try to find the video file in the subdirectory
   # - Do not descend further into children directories
-  # - function does not verify file is media, but takes a best guess from filtering rules below
+  # - function does not verify file is media, but takes a best guess from list(filtering rules below
   if not filepath:
     return
   
@@ -75,22 +75,22 @@ def get_filepath_from_dir(filepath):
   if os.path.isdir(filepath):
     files = os.listdir(filepath)
     
-    # Create absolute path to file, filter out deeper sub directories
+    # Create absolute path to file, list(filter out deeper sub directories
     files = map(lambda x: "{}/{}".format(filepath.rstrip("/"), x), files)
-    files = filter(lambda x: not os.path.isdir(x), files)
+    files = list(filter(lambda x: not os.path.isdir(x), files))
 
     # Remove non-video extensions. Assume all valid video extensions are 3 or 4 digits
-    files = filter(lambda x: x.lower().split(".")[-1] not in ["srt", "txt", "md", "nfo", "idx", "sub", "ds_store"], files)
-    files = filter(lambda x: len(x.split(".")[-1]) in [3, 4], files)
+    files = list(filter(lambda x: x.lower().split(".")[-1] not in ["srt", "txt", "md", "nfo", "idx", "sub", "ds_store"], files))
+    files = list(filter(lambda x: len(x.split(".")[-1]) in [3, 4], files))
 
-    # No valid files after filtering
+    # No valid files after list(filtering
     if not files:
       return
 
     # Try to directly get a video file by a list of common extensions
     # Otherwise, we'll simply try with first remaining item in the list
     # TODO : Could return all remaining paths to pass to mediainfo to see if we can find the video file
-    video_files = filter(lambda x: x.lower().split(".")[-1] in ["avi", "mp4", "mpeg", "mpg", "mkv", "wmv", "flv", "m4v"], files)
+    video_files = list(filter(lambda x: x.lower().split(".")[-1] in ["avi", "mp4", "mpeg", "mpg", "mkv", "wmv", "flv", "m4v"], files))
     if video_files:
       return video_files[0]
     else:
@@ -107,10 +107,10 @@ def video_media_details(filepath):
   
   try:
     video_track = [t for t in media_info.tracks if t.track_type == 'Video'][0]
-    subtitles = filter(
+    subtitles = list(filter(
         lambda x: x!= None,
         list(set([t.language for t in media_info.tracks if t.track_type == 'Text']))
-    )
+    ))
   except:
     return
 

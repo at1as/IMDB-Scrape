@@ -109,8 +109,8 @@
         </span>
         <hr>
         
-        {% if movie.has_key('awards') %}
-          {% if movie.has_key('awards_link') %}
+        {% if 'awards' in movie %}
+          {% if 'awards_link' in movie %}
             <div id="item-awards">
               <a target="_blank" href="{{ movie.awards_link }}">{{ movie.awards}}</a>
             </div>

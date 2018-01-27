@@ -3,15 +3,15 @@
 
 from   __future__ import unicode_literals
 from   datetime import datetime
-from   helpers import HEADERS, verify_config_file, video_media_details, get_filepath_from_dir, path_of_depth, get_nested_directory_contents
+from   .helpers import HEADERS, verify_config_file, video_media_details, get_filepath_from_dir, path_of_depth, get_nested_directory_contents
 import jinja2
 import json
 import lxml.html
-from   message import Message
+from   .message import Message
 import os
 import requests
 import pdb
-import scraper
+from . import scraper
 import pymediainfo
 import shutil
 import sys
@@ -112,8 +112,8 @@ class Retriever():
           saved_files = json.load(saved_file_list)
 
           # Do not repeat scrape for already acquired title
-          if not saved_files.has_key(file_details['name']):
-            print "Now adding: %s : %s" %(path, file_details['name'])
+          if not file_details['name'] in saved_files:
+            print("Now adding: %s : %s" %(path, file_details['name']))
             filtered_file_list.append(file_details)
 
     return filtered_file_list
@@ -157,10 +157,10 @@ class Retriever():
                     endpoint = page.xpath('//*[@id="main"]/div[1]/div[2]/table[1]/tr[%i]/td/a' %(index+1))[0].attrib['href']
                     return self.config["base_url"] + endpoint
 
-      print Message.warn("\"{}\" not found. Skipping.".format(asset))
+      print(Message.warn("\"{}\" not found. Skipping.".format(asset)))
 
     except IndexError:
-      print Message.warn("\"{}\" not found. Skipping.".format(asset))
+      print(Message.warn("\"{}\" not found. Skipping.".format(asset)))
 
 
   def save_image(self, url, name, mediatype):
@@ -270,14 +270,14 @@ class Retriever():
     # Movie Index Page
     movies_page = index.render(movie_list = saved_movies,
                                number_of_series = num_series)
-    f = open("_output/index.html", "w")
+    f = open("_output/index.html", "wb")
     f.write(movies_page.encode('utf-8'))
     f.close
 
     # TV Series Page
     series_page = series.render(series_list = saved_series,
                                 number_of_movies = num_movies)
-    j = open("_output/series.html", "w")
+    j = open("_output/series.html", "wb")
     j.write(series_page.encode('utf-8'))
     j.close
 
@@ -285,7 +285,7 @@ class Retriever():
     about_page = about.render(number_of_movies = num_movies,
                               number_of_series = num_series,
                               time = str(datetime.now()))
-    g = open("_output/about.html", "w")
+    g = open("_output/about.html", "wb")
     g.write(about_page.encode('utf-8'))
     g.close
 
@@ -296,7 +296,7 @@ class Retriever():
                                         movie = saved_movies[item],
                                         number_of_series = num_series,
                                         location = movie_location)
-      h = open(output_dir, "w")
+      h = open(output_dir, "wb")
       h.write(movie_page.encode('utf-8'))
       h.close
 
@@ -306,7 +306,7 @@ class Retriever():
       series_page = series_details.render(number_of_series = num_series,
                                           series = saved_series[item],
                                           number_of_movies = num_movies)
-      k = open(output_dir, "w")
+      k = open(output_dir, "wb")
       k.write(series_page.encode('utf-8'))
       k.close
 
